@@ -1,6 +1,9 @@
+%global commit0 37eef2838ea78b7e457e7236af93cd1581a63492
+%global githash %(c=%{commit0}; echo ${c:0:7})
+
 Name:		rtags
 Version:	2.8
-Release:	1%{?dist}
+Release:	3.git%{githash}%{?dist}
 Summary:	A indexer for the c language family with Emacs integration
 
 License:	GPLv3+
@@ -10,15 +13,17 @@ URL:		https://github.com/Andersbakken/rtags
 # set to 2.5, therefore the mismatch in the versions
 #
 # [1] https://github.com/gicmo/rtags/commit/be5709c
-Source0:	%{name}-2.5.tar.gz
+Source0:	%{name}-2.8-%{githash}.tar.gz
+
+Patch0:		gcc7.patch
 
 BuildRequires:	cmake, llvm-devel, clang-devel
 Buildrequires:	pkgconfig
-BuildRequires:  emacs
-BuildRequires:  openssl-devel
-BuildRequires:  zlib-devel
+BuildRequires:	emacs
+BuildRequires:	openssl-devel
+BuildRequires:	zlib-devel
 Requires:	clang-libs, llvm-libs
-Requires:       emacs-filesystem >= %{_emacs_version}
+Requires:	emacs-filesystem >= %{_emacs_version}
 
 %description
 RTags is a client/server application that indexes C/C++ code and keeps
@@ -30,7 +35,8 @@ follow-symbol and find-references support.
 
 
 %prep
-%setup -q -n %{name}-2.5
+%setup -q
+%patch0 -p1
 
 
 %build

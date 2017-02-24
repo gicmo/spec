@@ -1,0 +1,39 @@
+From 497bfb86425a67c063dae0b402985a52a945ae87 Mon Sep 17 00:00:00 2001
+From: Christian Kellner <christian@kellner.me>
+Date: Thu, 23 Feb 2017 15:58:25 +0100
+Subject: [PATCH] Fix compilation for g++ (libstdc++) 7.0
+
+We need to explicitly include the functional header for std::function
+and std::placeholders::*.
+---
+ rct.cmake       | 1 +
+ rct/EventLoop.h | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/src/rct/rct.cmake b/src/rct/rct.cmake
+index 5aaa926..004aaa6 100644
+--- a/src/rct/rct.cmake
++++ b/src/rct/rct.cmake
+@@ -235,6 +235,7 @@ if (ASAN)
+ endif ()
+ 
+ check_cxx_source_compiles("
++  #include <functional>
+   #include <memory>
+   #include <mutex>
+   #include <tuple>
+diff --git a/src/rct/rct/EventLoop.h b/src/rct/rct/EventLoop.h
+index 211271f..512923f 100644
+--- a/src/rct/rct/EventLoop.h
++++ b/src/rct/rct/EventLoop.h
+@@ -1,6 +1,7 @@
+ #ifndef EVENTLOOP_H // -*- mode:c++ -*-
+ #define EVENTLOOP_H
+ 
++#include <functional>
+ #include <map>
+ #include <memory>
+ #include <mutex>
+-- 
+2.11.1
+
