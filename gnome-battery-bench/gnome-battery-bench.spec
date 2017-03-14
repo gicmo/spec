@@ -1,6 +1,6 @@
-%global commit0 a1fe2296bf5c923d45e8df7a0d616d7c6a3152f5
+%global commit0 c01ac22b60b379956ca2f00b59dd85d7c76b1b66
 %global githash %(c=%{commit0}; echo ${c:0:7})
-%global gitdate 20170313
+%global gitdate 20170314
 
 Name:           gnome-battery-bench
 Version:        3.15.4
@@ -11,6 +11,7 @@ License:        GPLv2+
 URL:            https://git.gnome.org/browse/%{name}
 Source0:        https://git.gnome.org/browse/gnome-battery-bench/snapshot/%{name}-%{commit0}.tar.xz
 
+BuildRequires: gnome-common
 BuildRequires: asciidoc
 BuildRequires: desktop-file-utils
 BuildRequires: xmlto
@@ -34,6 +35,7 @@ battery lifetime.
 %setup -q -n %{name}-%{commit0}
 
 %build
+./autogen.sh
 %configure
 make %{?_smp_mflags}
 
