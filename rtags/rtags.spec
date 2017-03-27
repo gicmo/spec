@@ -1,21 +1,15 @@
-%global commit0 37eef2838ea78b7e457e7236af93cd1581a63492
-%global githash %(c=%{commit0}; echo ${c:0:7})
-
 Name:		rtags
-Version:	2.8
-Release:	3.git%{githash}%{?dist}
+Version:	2.9
+Release:	1
 Summary:	A indexer for the c language family with Emacs integration
 
 License:	GPLv3+
 URL:		https://github.com/Andersbakken/rtags
-# Source tarbarll was created with a patch[1] to CMakeLists.txt
-# and make package_source. The 2.8 release of rtags has its version
-# set to 2.5, therefore the mismatch in the versions
-#
-# [1] https://github.com/gicmo/rtags/commit/be5709c
-Source0:	%{name}-2.8-%{githash}.tar.gz
+# Source tarball is created with make package_source
+# and not taken from the github releases, due to git
+# submodules that are missing from the latter
+Source0:	%{name}-2.9.tar.gz
 
-Patch0:		gcc7.patch
 
 BuildRequires:	cmake, llvm-devel, clang-devel
 Buildrequires:	pkgconfig
@@ -36,7 +30,6 @@ follow-symbol and find-references support.
 
 %prep
 %setup -q
-%patch0 -p1
 
 
 %build
@@ -62,5 +55,14 @@ make install DESTDIR=%{buildroot}
 # %{_datadir}/bash-completion/completions/
 
 %changelog
+* Mon Mar 27 2017 Christian Kellner <ckellner@redhat.chom> - 2.9-1
+- New upstream release
+
+* Wed Mar  1 2017 Chrisian Kellner <ckellner@redhat.com> - 2.8-4.git37eef28
+- Package systemd socket/unit files
+
+* Fri Feb 24 2017 Chrisian Kellner <ckellner@redhat.com> - 2.8-3.git37eef28
+- Add gcc7.patch to fix compilation on gcc 7.0 (rawhide)
+
 * Fri Jan 13 2017 Chrisian Kellner <ckellner@redhat.com>
 - Initial revision.
