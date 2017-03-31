@@ -1,11 +1,13 @@
 Name:		git-crypt
 Version:	0.5.0
-Release:	1%{?dist}
+Release:	3%{?dist}
 Summary:	transparent file encryption in git
 
 License:	GPLv3+
 URL:		https://www.agwa.name/projects/git-crypt/
 Source0:	https://www.agwa.name/projects/git-crypt/downloads/%{name}-%{version}.tar.gz
+
+Patch0:		openssl11.patch
 
 BuildRequires:	openssl-devel
 BuildRequires:	libxslt
@@ -24,7 +26,11 @@ passwords) in the same repository as your code, without requiring you
 to lock down your entire repository.
 
 %prep
-%autosetup
+%setup -q
+
+%if 0%{?fedora} > 25
+%patch0 -p1
+%endif
 
 %build
 export DOCBOOK_XSL=/usr/share/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl
@@ -42,5 +48,11 @@ make install ENABLE_MAN=yes PREFIX=%{buildroot}/usr
 
 
 %changelog
-* Tue Mar 28 2017 Christian Kellner <ckellner@redhat.com> - 3.15.4-0
+* Fri Mar 31 2017 Christian Kellner <ckellner@redhat.com> - 0.5.0-3
+- Only apply the patch on fedora versions > 25
+
+* Thu Mar 30 2017 Christian Kellner <ckellner@redhat.com> - 0.5.0-2
+- Add patch for openssl 1.1 changes
+
+* Tue Mar 28 2017 Christian Kellner <ckellner@redhat.com> - 0.5.0-1
 - Initial revision

@@ -1,0 +1,62 @@
+From cf948a3e36ba2f06edcf61633d02195793974a92 Mon Sep 17 00:00:00 2001
+From: Christian Kellner <christian@kellner.me>
+Date: Thu, 30 Mar 2017 17:32:55 +0200
+Subject: [PATCH 1/2] Adapt to OpenSSL 1.1 API changes
+
+HMAC_CTX cannot be allocated on the stack anymore but must be
+allocated/free via HMAC_CTX_new/HMAC_CTX_free.
+Also HMAC_Init is deprecated, and HMAC_Init_ex should be used.
+---
+ crypto-openssl.cpp | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/crypto-openssl.cpp b/crypto-openssl.cpp
+index 6483e86..f7760fe 100644
+--- a/crypto-openssl.cpp
++++ b/crypto-openssl.cpp
+@@ -71,13 +71,18 @@ void Aes_ecb_encryptor::encrypt(const unsigned char* plain, unsigned char* ciphe
+ }
+ 
+ struct Hmac_sha1_state::Hmac_impl {
+-	HMAC_CTX ctx;
++	HMAC_CTX *ctx;
+ };
+ 
+ Hmac_sha1_state::Hmac_sha1_state (const unsigned char* key, size_t key_len)
+ : impl(new Hmac_impl)
+ {
+-	HMAC_Init(&(impl->ctx), key, key_len, EVP_sha1());
++	impl->ctx = HMAC_CTX_new();
++
++	if (impl->ctx == NULL) {
++		throw Crypto_error("Hmac_sha1_state", "could not allocate HMAC context");
++	}
++	HMAC_Init_ex(impl->ctx, key, key_len, EVP_sha1(), 0);
+ }
+ 
+ Hmac_sha1_state::~Hmac_sha1_state ()
+@@ -85,18 +90,18 @@ Hmac_sha1_state::~Hmac_sha1_state ()
+ 	// Note: Explicit destructor necessary because class contains an auto_ptr
+ 	// which contains an incomplete type when the auto_ptr is declared.
+ 
+-	HMAC_cleanup(&(impl->ctx));
++	HMAC_CTX_free(impl->ctx);
+ }
+ 
+ void Hmac_sha1_state::add (const unsigned char* buffer, size_t buffer_len)
+ {
+-	HMAC_Update(&(impl->ctx), buffer, buffer_len);
++	HMAC_Update(impl->ctx, buffer, buffer_len);
+ }
+ 
+ void Hmac_sha1_state::get (unsigned char* digest)
+ {
+ 	unsigned int len;
+-	HMAC_Final(&(impl->ctx), digest, &len);
++	HMAC_Final(impl->ctx, digest, &len);
+ }
+ 
+ 
+-- 
+2.12.2
+
