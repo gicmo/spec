@@ -1,10 +1,10 @@
-%global commit0 c01ac22b60b379956ca2f00b59dd85d7c76b1b66
+%global commit0 fa970837020be45e1d6934b6f34a910ed04eee3c
 %global githash %(c=%{commit0}; echo ${c:0:7})
-%global gitdate 20170314
+%global gitdate 20170404
 
 Name:           gnome-battery-bench
 Version:        3.15.4
-Release:        6.%{gitdate}git%{githash}%{?dist}
+Release:        7.%{gitdate}git%{githash}%{?dist}
 Summary:        Measure power usage in defined scenarios
 
 License:        GPLv2+
@@ -18,6 +18,7 @@ BuildRequires: xmlto
 BuildRequires: pkgconfig(gio-unix-2.0)
 BuildRequires: pkgconfig(glib-2.0)
 BuildRequires: pkgconfig(gtk+-3.0)
+BuildRequires: pkgconfig(gudev-1.0)
 BuildRequires: pkgconfig(json-glib-1.0)
 BuildRequires: pkgconfig(libevdev)
 BuildRequires: pkgconfig(polkit-gobject-1)
@@ -60,6 +61,10 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/org.gnome.BatteryBen
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/org.gnome.BatteryBench.Helper.conf
 
 %changelog
+* Tue Apr  4 2017 Christian Kellner <ckellner@redhat.com> - 3.15.4-7.20170404gitfa97083
+- New snapshot from git
+  New power supply monitoring code, battery info in system information.
+
 * Mon Mar 13 2017 Chrisian Kellner <ckellner@redhat.com> - 3.15.4-6.20170313gita1fe229
 - New snapshot from git
   UUIDs for test logs, handle sudden suspend more safely, more bugfixes.
