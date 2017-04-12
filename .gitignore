@@ -1,2 +1,4 @@
 *.xz
 *.rpm
+*.gz
+*.log
