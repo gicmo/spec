@@ -1,10 +1,10 @@
-%global commit0 fa970837020be45e1d6934b6f34a910ed04eee3c
+%global commit0 af476d1f0897b33b4d81d051e655145b736cafd4
 %global githash %(c=%{commit0}; echo ${c:0:7})
-%global gitdate 20170404
+%global gitdate 20170523
 
 Name:           gnome-battery-bench
 Version:        3.15.4
-Release:        7.%{gitdate}git%{githash}%{?dist}
+Release:        10.%{gitdate}git%{githash}%{?dist}
 Summary:        Measure power usage in defined scenarios
 
 License:        GPLv2+
@@ -61,6 +61,15 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/org.gnome.BatteryBen
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/org.gnome.BatteryBench.Helper.conf
 
 %changelog
+* Tue May 23 2017 Christian Kellner <ckellner@redhat.com> - 3.15.4-10.20170523gitaf476d1
+- New snapshot from git
+
+* Tue May 23 2017 Christian Kellner <ckellner@redhat.com> - 3.15.4-9.20170523gitd32f583
+- New snapshot from git
+
+* Wed May 10 2017 Christian Kellner <ckellner@redhat.com> - 3.15.4-8.20170510gite4df622
+- New snapshot from git
+
 * Tue Apr  4 2017 Christian Kellner <ckellner@redhat.com> - 3.15.4-7.20170404gitfa97083
 - New snapshot from git
   New power supply monitoring code, battery info in system information.
