@@ -1,9 +1,10 @@
 Name:		rtags
 Version:	2.9
-Release:	1
+Release:	2
 Summary:	A indexer for the c language family with Emacs integration
 
 License:	GPLv3+
+Group:		Development/Tools
 URL:		https://github.com/Andersbakken/rtags
 # Source tarball is created with make package_source
 # and not taken from the github releases, due to git
@@ -12,11 +13,10 @@ Source0:	%{name}-2.9.tar.gz
 
 
 BuildRequires:	cmake, llvm-devel, clang-devel
-Buildrequires:	pkgconfig
 BuildRequires:	emacs
-BuildRequires:	openssl-devel
-BuildRequires:	zlib-devel
-Requires:	clang-libs, llvm-libs
+BuildRequires:	pkgconfig(openssl)
+BuildRequires:	pkgconfig(zlib)
+BuildRequires:	pkgconfig(bash-completion)
 Requires:	emacs-filesystem >= %{_emacs_version}
 
 %description
@@ -27,16 +27,13 @@ ObjC/ObjC++. It allows you to find symbols by name (including nested
 class and namespace scope). Most importantly we give you proper
 follow-symbol and find-references support.
 
-
 %prep
 %setup -q
-
 
 %build
 mkdir -p build
 cd build
-%cmake .. \
-       -DCMAKE_BUILD_TYPE=RelWithDebInfo
+%cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo
 
 make %{?_smp_mflags}
 
@@ -52,9 +49,12 @@ make install DESTDIR=%{buildroot}
 %{_mandir}/man7/rc.7*
 %{_mandir}/man7/rdm.7*
 %{_emacs_sitelispdir}/rtags
-# %{_datadir}/bash-completion/completions/
+%{_datadir}/bash-completion/
 
 %changelog
+* Tue May 23 2017 Christian Kellner <ckellner@redhat.com> - 2.9-2
+- Package bash completions
+
 * Mon Mar 27 2017 Christian Kellner <ckellner@redhat.chom> - 2.9-1
 - New upstream release
 
