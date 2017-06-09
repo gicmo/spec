@@ -1,0 +1,111 @@
+diff --git c/commands.cpp w/commands.cpp
+index 2b86930..bdd6a40 100644
+--- c/commands.cpp
++++ w/commands.cpp
+@@ -254,6 +254,27 @@ static std::string get_internal_key_path (const char* key_name)
+ 	return path;
+ }
+ 
++std::string get_git_config (const std::string& name)
++{
++	// git config --get
++	std::vector<std::string>	command;
++	command.push_back("git");
++	command.push_back("config");
++	command.push_back("--get");
++	command.push_back(name);
++
++	std::stringstream	output;
++
++	if (!successful_exit(exec_command(command, output))) {
++		throw Error("'git config' missing value for key '" + name +"'");
++	}
++
++	std::string		value;
++	std::getline(output, value);
++
++	return value;
++}
++
+ static std::string get_repo_state_path ()
+ {
+ 	// git rev-parse --show-toplevel
+diff --git c/commands.hpp w/commands.hpp
+index 32caa0f..f441e93 100644
+--- c/commands.hpp
++++ w/commands.hpp
+@@ -70,4 +70,7 @@ void help_migrate_key (std::ostream&);
+ void help_refresh (std::ostream&);
+ void help_status (std::ostream&);
+ 
++// other
++std::string get_git_config (const std::string& name);
++
+ #endif
+diff --git c/gpg.cpp w/gpg.cpp
+index 04f3f60..a244362 100644
+--- c/gpg.cpp
++++ w/gpg.cpp
+@@ -30,8 +30,17 @@
+ 
+ #include "gpg.hpp"
+ #include "util.hpp"
++#include "commands.hpp"
+ #include <sstream>
+ 
++static std::string gpg_get_executable()
++{
++    std::string gpgbin = get_git_config("gpg.program");
++    if (gpgbin == "") {
++        gpgbin = "gpg";
++    }
++    return gpgbin;
++}
+ static std::string gpg_nth_column (const std::string& line, unsigned int col)
+ {
+ 	std::string::size_type	pos = 0;
+@@ -62,7 +71,7 @@ std::string gpg_get_uid (const std::string& fingerprint)
+ {
+ 	// gpg --batch --with-colons --fixed-list-mode --list-keys 0x7A399B2DB06D039020CD1CE1D0F3702D61489532
+ 	std::vector<std::string>	command;
+-	command.push_back("gpg");
++	command.push_back(gpg_get_executable());
+ 	command.push_back("--batch");
+ 	command.push_back("--with-colons");
+ 	command.push_back("--fixed-list-mode");
+@@ -94,7 +103,7 @@ std::vector<std::string> gpg_lookup_key (const std::string& query)
+ 
+ 	// gpg --batch --with-colons --fingerprint --list-keys jsmith@example.com
+ 	std::vector<std::string>	command;
+-	command.push_back("gpg");
++	command.push_back(gpg_get_executable());
+ 	command.push_back("--batch");
+ 	command.push_back("--with-colons");
+ 	command.push_back("--fingerprint");
+@@ -125,7 +134,7 @@ std::vector<std::string> gpg_list_secret_keys ()
+ {
+ 	// gpg --batch --with-colons --list-secret-keys --fingerprint
+ 	std::vector<std::string>	command;
+-	command.push_back("gpg");
++	command.push_back(gpg_get_executable());
+ 	command.push_back("--batch");
+ 	command.push_back("--with-colons");
+ 	command.push_back("--list-secret-keys");
+@@ -154,7 +163,7 @@ void gpg_encrypt_to_file (const std::string& filename, const std::string& recipi
+ {
+ 	// gpg --batch -o FILENAME -r RECIPIENT -e
+ 	std::vector<std::string>	command;
+-	command.push_back("gpg");
++	command.push_back(gpg_get_executable());
+ 	command.push_back("--batch");
+ 	if (key_is_trusted) {
+ 		command.push_back("--trust-model");
+@@ -174,7 +183,7 @@ void gpg_decrypt_from_file (const std::string& filename, std::ostream& output)
+ {
+ 	// gpg -q -d FILENAME
+ 	std::vector<std::string>	command;
+-	command.push_back("gpg");
++	command.push_back(gpg_get_executable());
+ 	command.push_back("-q");
+ 	command.push_back("-d");
+ 	command.push_back(filename);
