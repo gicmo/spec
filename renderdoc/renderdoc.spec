@@ -47,7 +47,7 @@ of any application using Vulkan, D3D11, OpenGL or D3D12 across Windows
 %patch0 -p1
 
 # local swig
-ln -s %{SOURCE1} .
+cp -a %{SOURCE1} .
 %patch1 -p1
 %patch2 -p1
 
@@ -64,7 +64,7 @@ cd build
        -DBUILD_DISTRIBUTION_VERSION="%{version}-%{release}" \
        -DBUILD_VERSION_DIST_CONTACT="https://copr.fedorainfracloud.org/coprs/gicmo/devel/" \
        -DCMAKE_INSTALL_PREFIX=/usr \
-       -DCMAKE_BUILD_TYPE=RelWithDebInfo
+       -DCMAKE_BUILD_TYPE=Release
 
 make %{?_smp_mflags}
 
