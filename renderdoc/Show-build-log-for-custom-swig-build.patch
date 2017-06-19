@@ -1,0 +1,25 @@
+From e4ad8aa922b6f1f5e79f1770e64a97a0c75f5d99 Mon Sep 17 00:00:00 2001
+From: Christian Kellner <christian@kellner.me>
+Date: Mon, 19 Jun 2017 15:49:02 +0200
+Subject: [PATCH 3/3] Show build log for custom swig build
+
+---
+ qrenderdoc/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/qrenderdoc/CMakeLists.txt b/qrenderdoc/CMakeLists.txt
+index e95266f..fdd9bbd 100644
+--- a/qrenderdoc/CMakeLists.txt
++++ b/qrenderdoc/CMakeLists.txt
+@@ -67,7 +67,7 @@ ExternalProject_Add(custom_swig
+     # using an URL to a zip directly so we don't clone the history etc
+     URL ${CMAKE_SOURCE_DIR}/swig-3.0.12.tar.gz
+     BUILD_IN_SOURCE 1
+-    CONFIGURE_COMMAND ./autogen.sh > /dev/null 2>&1
++    CONFIGURE_COMMAND ./autogen.sh
+     COMMAND CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} ./configure --with-pcre=yes --prefix=${CMAKE_BINARY_DIR} > /dev/null
+     BUILD_COMMAND $(MAKE) > /dev/null 2>&1
+     INSTALL_COMMAND $(MAKE) install > /dev/null 2>&1)
+-- 
+2.9.4
+
