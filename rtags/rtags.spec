@@ -1,5 +1,5 @@
 Name:		rtags
-Version:	2.9
+Version:	2.12
 Release:	2
 Summary:	A indexer for the c language family with Emacs integration
 
@@ -9,7 +9,7 @@ URL:		https://github.com/Andersbakken/rtags
 # Source tarball is created with make package_source
 # and not taken from the github releases, due to git
 # submodules that are missing from the latter
-Source0:	%{name}-2.9.tar.gz
+Source0:	%{name}-%{version}.tar.gz
 
 
 BuildRequires:	cmake, llvm-devel, clang-devel
@@ -52,6 +52,9 @@ make install DESTDIR=%{buildroot}
 %{_datadir}/bash-completion/
 
 %changelog
+* Tue Aug  1 2017 Christian Kellner <ckellner@redhat.com> - 2.12-1
+- New upstream release
+
 * Tue May 23 2017 Christian Kellner <ckellner@redhat.com> - 2.9-2
 - Package bash completions
 
