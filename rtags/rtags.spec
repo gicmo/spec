@@ -1,6 +1,6 @@
 Name:		rtags
 Version:	2.12
-Release:	2
+Release:	3
 Summary:	A indexer for the c language family with Emacs integration
 
 License:	GPLv3+
@@ -10,7 +10,8 @@ URL:		https://github.com/Andersbakken/rtags
 # and not taken from the github releases, due to git
 # submodules that are missing from the latter
 Source0:	%{name}-%{version}.tar.gz
-
+Source1:	rtags.service
+Source2:	rtags.socket
 
 BuildRequires:	cmake, llvm-devel, clang-devel
 BuildRequires:	emacs
@@ -41,6 +42,10 @@ make %{?_smp_mflags}
 cd build
 make install DESTDIR=%{buildroot}
 
+mkdir -p %{buildroot}%{_userunitdir}
+install -p -m644 -t %{buildroot}%{_userunitdir} %{SOURCE1} %{SOURCE2}
+
+
 %files
 %license LICENSE.txt
 %doc	 README.org
@@ -50,8 +55,13 @@ make install DESTDIR=%{buildroot}
 %{_mandir}/man7/rdm.7*
 %{_emacs_sitelispdir}/rtags
 %{_datadir}/bash-completion/
+%{_userunitdir}/rtags.service
+%{_userunitdir}/rtags.socket
 
 %changelog
+* Wed Aug  2 2017 Christian Kellner <ckellner@redhat.com> - 2.12-3
+- Add systemd service/socket files
+
 * Tue Aug  1 2017 Christian Kellner <ckellner@redhat.com> - 2.12-1
 - New upstream release
 
