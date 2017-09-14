@@ -1,14 +1,18 @@
 Name:		rtags
-Version:	2.12
-Release:	3
+Version:	2.14
+Release:	1%{?dist}
 Summary:	A indexer for the c language family with Emacs integration
 
 License:	GPLv3+
-Group:		Development/Tools
 URL:		https://github.com/Andersbakken/rtags
-# Source tarball is created with make package_source
-# and not taken from the github releases, due to git
-# submodules that are missing from the latter
+# Source tarball is created from the git repository
+# with make package_source and not taken from the
+# github releases, due to git submodules that are
+# missing from the latter.
+#  git clone --recursive https://github.com/Andersbakken/rtags.git
+#  cd rtags && git checkout v<version>
+#  mkdir build && cd build && cmake -DRTAGS_ENABLE_DEV_OPTIONS=1 ..
+#  make package_source
 Source0:	%{name}-%{version}.tar.gz
 Source1:	rtags.service
 Source2:	rtags.socket
@@ -18,6 +22,8 @@ BuildRequires:	emacs
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(zlib)
 BuildRequires:	pkgconfig(bash-completion)
+%{?systemd_requires}
+BuildRequires: systemd
 Requires:	emacs-filesystem >= %{_emacs_version}
 
 %description
@@ -45,6 +51,11 @@ make install DESTDIR=%{buildroot}
 mkdir -p %{buildroot}%{_userunitdir}
 install -p -m644 -t %{buildroot}%{_userunitdir} %{SOURCE1} %{SOURCE2}
 
+%preun
+%systemd_user_preun %{name}.service
+
+%post
+%systemd_user_post %{name}.service
 
 %files
 %license LICENSE.txt
@@ -59,6 +70,11 @@ install -p -m644 -t %{buildroot}%{_userunitdir} %{SOURCE1} %{SOURCE2}
 %{_userunitdir}/rtags.socket
 
 %changelog
+* Thu Sep 14 2017 Christian Kellner <ckellner@redhat.com> - 2.14-1
+- New upstream release
+- Proper suppport for systemd unit files
+- Fix some packaging issues
+
 * Wed Aug  2 2017 Christian Kellner <ckellner@redhat.com> - 2.12-3
 - Add systemd service/socket files
 
