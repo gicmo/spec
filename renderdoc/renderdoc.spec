@@ -1,13 +1,17 @@
 %global vswig    modified-1
 Name:           renderdoc
 Version:        0.91
-Release:        1%{?dist}
-Summary:        RenderDoc is a stand-alone graphics debugging tool.
+Release:        2%{?dist}
+Summary:        RenderDoc is a stand-alone graphics debugging tool
 
 License:        MIT
 URL:            https://renderdoc.org
 Source0:        https://github.com/baldurk/renderdoc/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        https://github.com/baldurk/swig/archive/renderdoc-%{vswig}/swig-%{vswig}.tar.gz
+
+# plthook library, used by renderdoc is only supported on x86
+ExclusiveArch: %{ix86} x86_64
+
 
 # for the local swig
 BuildRequires:  autoconf
@@ -33,10 +37,9 @@ Requires:       hicolor-icon-theme
 
 
 %description
-RenderDoc is a free MIT licensed stand-alone graphics debugger that
-allows quick and easy single-frame capture and detailed introspection
-of any application using Vulkan, D3D11, OpenGL or D3D12 across Windows
-7 - 10, Linux.
+A free MIT licensed stand-alone graphics debugger that allows quick
+and easy single-frame capture and detailed introspection of any
+application using Vulkan, OpenGL.
 
 %prep
 %setup -q -n %{name}-%{version}
@@ -113,6 +116,9 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_sysconfdir}/vulkan/implicit_layer.d/%{name}_capture.json
 
 %changelog
+* Mon Sep 18 2017 Christian Kellner <gicmo@hanada.local> - 0.91-2
+- Restrict archs to x86
+
 * Mon Sep 18 2017 Christian Kellner <ckellner@redhat.com> - 0.91-1
 - New upstream version
 - Dropped patches, replaced by cmake options.
