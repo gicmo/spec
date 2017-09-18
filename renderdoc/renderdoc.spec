@@ -1,6 +1,6 @@
-%global vswig    3.0.12
+%global vswig    modified-1
 Name:           renderdoc
-Version:        0.34
+Version:        0.91
 Release:        1%{?dist}
 Summary:        RenderDoc is a stand-alone graphics debugging tool.
 
@@ -8,10 +8,6 @@ License:        MIT
 URL:            https://renderdoc.org
 Source0:        https://github.com/baldurk/renderdoc/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        https://github.com/baldurk/swig/archive/renderdoc-%{vswig}/swig-%{vswig}.tar.gz
-
-Patch0:         Use-qmake-qt5-as-qmake-binary.patch
-Patch1:         Use-local-version-of-custom-swig.patch
-Patch2:         Show-build-log-for-custom-swig-build.patch
 
 # for the local swig
 BuildRequires:  autoconf
@@ -44,17 +40,13 @@ of any application using Vulkan, D3D11, OpenGL or D3D12 across Windows
 
 %prep
 %setup -q -n %{name}-%{version}
-%patch0 -p1
-
-# local swig
-cp -a %{SOURCE1} .
-%patch1 -p1
-%patch2 -p1
 
 %build
 mkdir -p build
 cd build
 %cmake .. \
+       -DQMAKE_QT5_COMMAND=qmake-qt5 \
+       -DRENDERDOC_SWIG_PACKAGE=%{SOURCE1} \
        -DENABLE_GL=ON \
        -DENABLE_VULKAN=ON \
        -DENABLE_VULKAN=ENABLE_RENDERDOCCMD \
@@ -111,15 +103,19 @@ update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 %{_datadir}/mime/packages/renderdoc-capture.xml
 %{_datadir}/pixmaps/%{name}-icon-*.xpm
 
-#should be in doc package
+#maybe should be in doc package ?
 %doc %{_docdir}/%{name}/
 
-# should be in devel package
+# maybe should be in devel package ?
 %{_includedir}/%{name}.h
 
 # should be in -vulkan package ?
 %{_sysconfdir}/vulkan/implicit_layer.d/%{name}_capture.json
 
 %changelog
+* Mon Sep 18 2017 Christian Kellner <ckellner@redhat.com> - 0.91-1
+- New upstream version
+- Dropped patches, replaced by cmake options.
+
 * Mon Jun 19 2017 Christian Kellner <ckellner@redhat.com>
 - Initial packaging
