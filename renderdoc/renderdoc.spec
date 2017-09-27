@@ -2,7 +2,7 @@
 Name:           renderdoc
 Version:        0.91
 Release:        3%{?dist}
-Summary:        RenderDoc is a stand-alone graphics debugging tool
+Summary:        A stand-alone graphics debugging tool
 
 License:        MIT
 URL:            https://renderdoc.org
