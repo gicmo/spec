@@ -1,7 +1,7 @@
 %global vswig    modified-1
 Name:           renderdoc
 Version:        0.91
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A stand-alone graphics debugging tool
 
 License:        MIT
@@ -84,13 +84,9 @@ rm %{buildroot}/%{_datadir}/menu/renderdoc
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 
 %post
-/sbin/ldconfig
-
 touch --no-create %{_datadir}/icons/hicolor >&/dev/null || :
 
 %postun
-/sbin/ldconfig
-
 if [ $1 -eq 0 ]; then
   touch --no-create %{_datadir}/icons/hicolor >&/dev/null || :
   gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
@@ -119,6 +115,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor >&/dev/null || :
 
 
 %changelog
+* Wed Sep 27 2017 Christian Kellner <ckellner@redhat.com> - 0.91-4
+- Remove ldconfig calls
+
 * Wed Sep 27 2017 Christian Kellner <ckellner@redhat.com> - 0.91-3
 - Split out devel package
 - Address review comments
