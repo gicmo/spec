@@ -1,12 +1,15 @@
 Name:		git-crypt
 Version:	0.6.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	Transparent file encryption in git
 
-License:	GPLv3+
+# MIT/X11 (BSD like): fhstream.{hpp|cpp} and parse_options.{hpp|cpp}
+# GPLv3+: all other source files
+License:	GPLv3+ and MIT
 URL:		https://www.agwa.name/projects/git-crypt
 Source0:	%{URL}/downloads/%{name}-%{version}.tar.gz
 
+BuildRequires:	gcc-c++
 BuildRequires:	openssl-devel
 BuildRequires:	libxslt
 BuildRequires:	docbook-style-xsl
@@ -24,25 +27,32 @@ passwords) in the same repository as your code, without requiring you
 to lock down your entire repository.
 
 %prep
-%setup -q
+%autosetup
+sed -i "s|^\tinstall -|\t\$(INSTALL) -|" Makefile
 
 %build
 export DOCBOOK_XSL=%{_datadir}/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl
 export ENABLE_MAN=yes
 export CXXFLAGS="%{optflags}"
+export LDFLAGS="%{__global_ldflags}"
 %make_build
 
 %install
-make install ENABLE_MAN=yes PREFIX=%{buildroot}%{_prefix}
+%make_install ENABLE_MAN=yes PREFIX=%{_prefix}
 
 %files
 %license COPYING
-%doc README README.md INSTALL INSTALL.md
+%doc README README.md
 %{_bindir}/%{name}
 %{_mandir}/man1/git-crypt.1*
 
 
 %changelog
+* Sun Apr  1 2018 Christian Kellner <ckellner@redhat.com> - 0.6.0-3
+- More review comments: License corrections, LDFLAGS,
+  patch Makefile to preserve timestamps for install and
+  fix add gcc-c++ as build requirement.
+
 * Sat Mar 31 2018 Christian Kellner <ckellner@redhat.com> - 0.6.0-2
 - Address review comments: Fix Summary, use macros for paths.
 
