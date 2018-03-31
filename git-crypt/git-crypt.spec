@@ -1,11 +1,11 @@
 Name:		git-crypt
 Version:	0.6.0
-Release:	1%{?dist}
-Summary:	transparent file encryption in git
+Release:	2%{?dist}
+Summary:	Transparent file encryption in git
 
 License:	GPLv3+
-URL:		https://www.agwa.name/projects/git-crypt/
-Source0:	https://www.agwa.name/projects/git-crypt/downloads/%{name}-%{version}.tar.gz
+URL:		https://www.agwa.name/projects/git-crypt
+Source0:	%{URL}/downloads/%{name}-%{version}.tar.gz
 
 BuildRequires:	openssl-devel
 BuildRequires:	libxslt
@@ -27,13 +27,13 @@ to lock down your entire repository.
 %setup -q
 
 %build
-export DOCBOOK_XSL=/usr/share/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl
+export DOCBOOK_XSL=%{_datadir}/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl
 export ENABLE_MAN=yes
 export CXXFLAGS="%{optflags}"
 %make_build
 
 %install
-make install ENABLE_MAN=yes PREFIX=%{buildroot}/usr
+make install ENABLE_MAN=yes PREFIX=%{buildroot}%{_prefix}
 
 %files
 %license COPYING
@@ -43,6 +43,9 @@ make install ENABLE_MAN=yes PREFIX=%{buildroot}/usr
 
 
 %changelog
+* Sat Mar 31 2018 Christian Kellner <ckellner@redhat.com> - 0.6.0-2
+- Address review comments: Fix Summary, use macros for paths.
+
 * Sat Mar 31 2018 Christian Kellner <ckellner@redhat.com> - 0.6.0-1
 - Drop gpg-from-git-config.patch (included upstream)
 - Drop openssl11.patch (fixed upstream)
