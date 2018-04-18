@@ -1,0 +1,29 @@
+From 396e36d3356d95ce5da4bee2070f4838b5a97f45 Mon Sep 17 00:00:00 2001
+From: Christian Kellner <christian@kellner.me>
+Date: Wed, 18 Apr 2018 11:26:32 +0200
+Subject: [PATCH] policy: normal local & active users can manage
+
+Instead of allowing only admins, i.e. people in the wheel group,
+to manage, e.g. authorize, enroll, forget devices, this policy
+change should allow all people to do so.
+---
+ policy/org.freedesktop.bolt.rules.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/policy/org.freedesktop.bolt.rules.in b/policy/org.freedesktop.bolt.rules.in
+index 6334865..12824fb 100644
+--- a/policy/org.freedesktop.bolt.rules.in
++++ b/policy/org.freedesktop.bolt.rules.in
+@@ -3,8 +3,7 @@ polkit.addRule(function(action, subject) {
+     if ((action.id === "org.freedesktop.bolt.enroll" ||
+ 	 action.id === "org.freedesktop.bolt.authorize" ||
+ 	 action.id === "org.freedesktop.bolt.manage") &&
+-        subject.active === true && subject.local === true &&
+-        subject.isInGroup("@privileged_group@")) {
++        subject.active === true && subject.local === true) {
+             return polkit.Result.YES;
+     }
+ });
+-- 
+2.17.0
+
