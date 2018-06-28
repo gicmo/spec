@@ -1,0 +1,16 @@
+* Fedora:
+** Issues
+- [ ] location of the gamemoded daemon (currently /usr/bin)
+  Why is it not in /usr/libexec/ (or better /usr/libexec/gamemode)
+
+- [ ] location of the libraries (currently /usr/lib)
+  They are unversioned, but maybe that is ok, becasue they are
+  internal, i.e. get dlopen'ed by the inlined functions from the
+  inlined functions in the header.
+
+** Questions:
+- [ ] system user vs system unit
+  What is the reason that this is a user unit file, not a system one?
+
+- [ ] man page section for gamemoded (1 vs 8)
+  It is a daemon, so should be in secton 8?
