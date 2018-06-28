@@ -15,7 +15,6 @@ BuildRequires: pkgconfig(systemd)
 BuildRequires: pkgconfig(libsystemd)
 BuildRequires: polkit-devel
 BuildRequires: systemd
-%{?systemd_requires}
 
 %description
 GameMode is a daemon/lib combo for GNU/Linux that allows games to
@@ -46,15 +45,6 @@ Files for development with %{name}.
 
 %install
 %meson_install
-
-%post
-%systemd_post %{name}.service
-
-%preun
-%systemd_preun %{name}.service
-
-%postun
-%systemd_postun_with_restart %{name}.service
 
 %files
 %license LICENSE.txt
