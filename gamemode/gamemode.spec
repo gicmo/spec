@@ -69,5 +69,6 @@ Files for development with %{name}.
 %changelog
 * Thu Jun 28 2018 Christian Kellner <christian@kellner.me>  - 1.1-1
 - Initial package
+  Resolves: #1596293
 - Patch for dbus auto-activation
 - Patch for proper library versioning
