@@ -1,7 +1,7 @@
 Name:		gamemode
 Version:	1.1
 Release:	1%{?dist}
-Summary:	Optimise system performance for games on demand
+Summary:	Optimize system performance for games on demand
 License:	BSD
 URL:		https://github.com/FeralInteractive/gamemode
 Source0:	%{url}/releases/download/%{version}/%{name}-%{version}.tar.xz
@@ -18,9 +18,9 @@ BuildRequires: systemd
 
 %description
 GameMode is a daemon/lib combo for GNU/Linux that allows games to
-request a set of optimisations be temporarily applied to the host OS.
+request a set of optimizations be temporarily applied to the host OS.
 GameMode was designed primarily as a stop-gap solution to problems
-with the Intel and AMD CPU powersave or ondemand governors, but
+with the Intel and AMD CPU "powersave" or "ondemand" governors, but
 is now able to launch custom user defined plugins, and is intended
 to be expanded further, as there are a wealth of automation tasks
 one might want to apply.
