@@ -5,8 +5,9 @@ Summary:	Optimize system performance for games on demand
 License:	BSD
 URL:		https://github.com/FeralInteractive/gamemode
 Source0:	%{url}/releases/download/%{version}/%{name}-%{version}.tar.xz
-Patch0:		dbus-activatable.patch
-Patch1:		version-libraries.patch
+Patch0:		manpage-section-8.patch
+Patch1:		dbus-activatable.patch
+Patch2:		version-libraries.patch
 
 BuildRequires: gcc
 BuildRequires: asciidoc
@@ -36,6 +37,7 @@ Files for development with %{name}.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %meson
@@ -58,7 +60,7 @@ Files for development with %{name}.
 %{_datadir}/dbus-1/services/com.feralinteractive.GameMode.service
 %{_libdir}/libgamemode*.so.*
 %{_userunitdir}/gamemoded.service
-%{_mandir}/man1/gamemoded.1*
+%{_mandir}/man8/gamemoded.8*
 
 %files devel
 %{_includedir}/gamemode_client.h
@@ -70,5 +72,10 @@ Files for development with %{name}.
 * Thu Jun 28 2018 Christian Kellner <christian@kellner.me>  - 1.1-1
 - Initial package
   Resolves: #1596293
+- Patch to move manpage to section 8
+  Upstream commit 28fcb09413bbf95507788024b98b675cbf656f6c
 - Patch for dbus auto-activation
+  Merged PR https://github.com/FeralInteractive/gamemode/pull/62
 - Patch for proper library versioning
+  Merged PR https://github.com/FeralInteractive/gamemode/pull/63
+
