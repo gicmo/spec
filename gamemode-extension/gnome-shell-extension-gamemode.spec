@@ -5,10 +5,11 @@ Summary:        GameMode integration for GNOME Shell
 License:        LGPLv2
 URL:            https://github.com/gicmo/gamemode-extension
 Source0:        %{url}/archive/v%{version}/gamemode-extension-%{version}.tar.gz
+Patch0:         shell-master-changes.patch
 
 BuildRequires:  meson
 BuildRequires:  gettext >= 0.19.6
-Requires:       gnome-shell >= 3.32
+Requires:       gnome-shell >= 3.33
 Suggests:       gamemode
 BuildArch:      noarch
 
@@ -19,7 +20,7 @@ when the global GameMode status changes.
 
 
 %prep
-%autosetup -p0 -n gamemode-extension-%{version}%{?prerelease:-%{prerelease}}
+%autosetup -p1 -n gamemode-extension-%{version}%{?prerelease:-%{prerelease}}
 
 
 %build
@@ -43,4 +44,5 @@ when the global GameMode status changes.
 %changelog
 * Fri Jun 28 2019 Christian Kellner <christian@kellner.me> - 1-1
 - Initial package
+- Include patche to adapt for GNOME Shell 3.33 API changes.
 
