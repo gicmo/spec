@@ -10,7 +10,7 @@ Patch0:         shell-master-changes.patch
 BuildRequires:  meson
 BuildRequires:  gettext >= 0.19.6
 Requires:       gnome-shell >= 3.33
-Suggests:       gamemode
+Requires:       gamemode >= 1.4
 BuildArch:      noarch
 
 %description
