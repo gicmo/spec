@@ -7,7 +7,7 @@ License:	MIT
 URL:		https://hg.sr.ht/~scoopta/wofi
 Source0:	%{URL}/archive/v%{version}.tar.gz
 
-BuildRequires:	make
+BuildRequires:	meson
 BuildRequires:	gcc
 BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(gio-unix-2.0)
