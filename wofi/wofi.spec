@@ -3,7 +3,7 @@ Version:	1.0
 Release:	1%{?dist}
 Summary:	A window switcher, application launcher and dmenu replacement for wayland
 
-License:	MIT
+License:	GPLv3
 URL:		https://hg.sr.ht/~scoopta/wofi
 Source0:	%{URL}/archive/v%{version}.tar.gz
 
@@ -18,10 +18,10 @@ Wofi is like "rofi" a window switcher, application launcher and dmenu
 replacement but for wlroots-based wayland compositors.
 
 %prep
-%autosetup -p1 -n %{name}-v%{version}
+%autosetup -n %{name}-v%{version}
 
 %build
-%meson -Dversion=v%{version}
+%meson
 %meson_build
 
 %install
@@ -33,7 +33,7 @@ replacement but for wlroots-based wayland compositors.
 %{_bindir}/%{name}
 
 %changelog
-* Mon Jan 27 2020 Christian Kellner <christian@kellner.me> - 1.0-1
+* Mon Jan 27 2020 Christian Kellner <ckellner@redhat.com> - 1.0-1
 - Initial package of v1.0
 
 
