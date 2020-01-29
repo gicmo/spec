@@ -1,16 +1,21 @@
 Name:		brightnessctl
 Version:	0.4
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Read and control device brightness
 
 License:	MIT
 URL:		https://github.com/Hummer12007/brightnessctl
 Source0:	%{URL}/archive/%{version}/%{name}-%{version}.tar.gz
+# Use systemd's D-Bus API and install binary non-suid
+# https://github.com/Hummer12007/brightnessctl/pull/33 (merged)
+# https://github.com/Hummer12007/brightnessctl/pull/41 (merged)
 Patch0:		use-systemd-logind.patch
 
 BuildRequires:	make
 BuildRequires:	gcc
 BuildRequires:	pkgconfig(libsystemd)
+
+Requires: systemd >= 243
 
 %description
 This program allows you read and control device brightness. Devices,
@@ -21,12 +26,11 @@ It can also preserve current brightness before applying the operation,
 allowing for use cases like disabling back-light on lid close.
 
 %prep
-%autosetup -p1
+%autosetup
 
 %build
 export ENABLE_SYSTEMD=1
-export CFLAGS="%{optflags}"
-export LDFLAGS="%{__global_ldflags}"
+%set_build_flags
 %make_build
 
 %install
@@ -39,6 +43,10 @@ export LDFLAGS="%{__global_ldflags}"
 %{_mandir}/man1/%{name}.1*
 
 %changelog
+* Wed Jan 29 2020 Christian Kellner <ckellner@redhat.com> - 0.4-2
+- Require systemd >= 243
+- Use 'set_build_flags' macro
+
 * Sun Jan 26 2020 Christian Kellner <ckellner@redhat.com> - 0.4-1
 - New upstream release (0.4)
 - Add patch to use systemd-logind, modified from upstream PR 33 with
